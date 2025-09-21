@@ -1,25 +1,29 @@
+using InizioSearch.Models;
+using InizioSearch.Services;
+using InizioSearch.Utils;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<ISearchService, GoogleSearchService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.MapGet("/api/search", async (string? q, string? format, ISearchService service) =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    if (string.IsNullOrWhiteSpace(q))
+        return Results.BadRequest("Parameter ?q= is required");
 
-app.UseHttpsRedirection();
+    var resp = await service.SearchAsync(q.Trim(), 10);
 
-app.UseAuthorization();
+    if (string.Equals(format, "csv", StringComparison.OrdinalIgnoreCase))
+    {
+        var csv = CsvExporter.ToCsv(resp.Items);
+        return Results.Text(csv, "text/csv");
+    }
 
-app.MapControllers();
-
+    return Results.Json(resp);
+});
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.Run();
