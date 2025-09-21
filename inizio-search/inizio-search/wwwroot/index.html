@@ -1,109 +1,46 @@
-
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="cs">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Inizio Search</title>
-    <style>
-        body {
-            font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-            margin: 24px;
-            max-width: 900px
-        }
-
-        h1 {
-            margin: 0 0 12px
-        }
-
-        .row {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 12px
-        }
-
-        input[type="text"] {
-            flex: 1;
-            min-width: 240px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px
-        }
-
-        button {
-            padding: 10px 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: #fff;
-            cursor: pointer
-        }
-
-            button:disabled {
-                opacity: .6;
-                cursor: not-allowed
-            }
-
-        .hint {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 12px
-        }
-
-        .error {
-            background: #ffeef0;
-            color: #86181d;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
-            display: none
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px
-        }
-
-            .table th, .table td {
-                border-bottom: 1px solid #eee;
-                padding: 8px 6px;
-                vertical-align: top
-            }
-
-        .spinner {
-            display: none;
-            margin-left: 8px
-        }
-
-        .muted {
-            color: #666;
-            font-size: 13px
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Inizio Search</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:24px;max-width:900px}
+    h1{margin:0 0 12px}
+    .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    input[type="text"]{flex:1;min-width:240px;padding:10px;border:1px solid #ccc;border-radius:8px}
+    button{padding:10px 14px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .hint{color:#666;font-size:14px;margin-bottom:12px}
+    .error{background:#ffeef0;color:#86181d;padding:10px;border-radius:8px;margin:10px 0;display:none}
+    .table{width:100%;border-collapse:collapse;margin-top:12px}
+    .table th,.table td{border-bottom:1px solid #eee;padding:8px 6px;vertical-align:top}
+    .spinner{display:none;margin-left:8px}
+    .muted{color:#666;font-size:13px}
+  </style>
 </head>
 <body>
-    <h1>Inizio Search</h1>
-    <div class="hint">Введите запрос и получайте результаты с первой страницы Google (через API). Кнопкой можно скачать CSV.</div>
+  <h1>Inizio Search</h1>
+  <div class="hint">Zadejte dotaz a získejte výsledky z první stránky Googlu (přes API). Tlačítkem si můžete stáhnout CSV.</div>
 
-    <div class="row">
-        <input id="q" type="text" placeholder="например: python tutorial" />
-        <button id="btnSearch">Найти</button>
-        <button id="btnCsv">Скачать CSV</button>
-        <span id="spin" class="spinner">⏳</span>
-    </div>
+  <div class="row">
+    <input id="q" type="text" placeholder="např. python tutorial" />
+    <button id="btnSearch">Hledat</button>
+    <button id="btnCsv">Stáhnout CSV</button>
+    <span id="spin" class="spinner">⏳</span>
+  </div>
 
-    <div id="err" class="error"></div>
-    <div id="meta" class="muted"></div>
+  <div id="err" class="error"></div>
+  <div id="meta" class="muted"></div>
 
-    <table id="tbl" class="table" style="display:none">
-        <thead>
-            <tr><th>#</th><th>Заголовок</th><th>Описание</th></tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+  <table id="tbl" class="table" style="display:none">
+    <thead>
+      <tr><th>#</th><th>Název</th><th>Popis</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-    <script>
+  <script>
     const qEl = document.getElementById('q');
     const btnSearch = document.getElementById('btnSearch');
     const btnCsv = document.getElementById('btnCsv');
@@ -125,13 +62,10 @@
     function clearError(){
       err.textContent = '';
       err.style.display = 'none';
-    }
     function render(data){
-      // meta
       const when = new Date(data.fetchedAt || data.FetchedAt || Date.now());
-      meta.textContent = `Запрос: "${data.query || data.Query}", результатов: ${data.items?.length ?? 0}, время: ${when.toLocaleString()}`;
+      meta.textContent = `Dotaz: "${data.query || data.Query}", výsledků: ${data.items?.length ?? 0}, čas: ${when.toLocaleString()}`;
 
-      // table
       tbody.innerHTML = '';
       (data.items || []).forEach(it => {
         const tr = document.createElement('tr');
@@ -145,7 +79,7 @@
         a.href = it.link || it.Link || '#';
         a.target = '_blank';
         a.rel = 'noopener';
-        a.textContent = it.title || it.Title || '(no title)';
+        a.textContent = it.title || it.Title || '(bez názvu)';
         tdTitle.appendChild(a);
         tr.appendChild(tdTitle);
 
@@ -161,37 +95,33 @@
 
     async function doSearch(){
       const q = qEl.value.trim();
-      if(!q){ showError('Введите поисковый запрос.'); return; }
+      if(!q){ showError('Zadejte vyhledávací dotaz.'); return; }
       clearError(); setLoading(true);
       try{
         const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
         if(!res.ok){
           const t = await res.text();
-          throw new Error(`Ошибка ${res.status}: ${t}`);
+          throw new Error(`Chyba ${res.status}: ${t}`);
         }
         const data = await res.json();
         render(data);
       }catch(e){
-        showError(e.message || 'Неизвестная ошибка поиска');
+        showError(e.message || 'Neznámá chyba při hledání');
       }finally{
         setLoading(false);
       }
     }
     function downloadCsv(){
       const q = qEl.value.trim();
-      if(!q){ showError('Введите поисковый запрос.'); return; }
+      if(!q){ showError('Zadejte vyhledávací dotaz.'); return; }
       clearError();
-      // просто перенаправляем — браузер скачает CSV
       window.location.href = `/api/search?q=${encodeURIComponent(q)}&format=csv`;
     }
 
-    // handlers
     btnSearch.addEventListener('click', doSearch);
     btnCsv.addEventListener('click', downloadCsv);
     qEl.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ doSearch(); } });
-
-    // autofocus для удобства
     qEl.focus();
-    </script>
+  </script>
 </body>
 </html>
