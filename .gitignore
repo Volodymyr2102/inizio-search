@@ -13,3 +13,117 @@ Release/
 *.cache
 *.log
 
+
+# --- OS / Tools ---
+.DS_Store
+Thumbs.db
+
+# --- IDE: Visual Studio / Rider / VS Code ---
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.idea/
+*.iml
+.vscode/
+.settings/
+
+# --- Build outputs (включая решения с несколькими проектами) ---
+bin/
+obj/
+[Bb]uild/
+[Rr]elease*/
+[Dd]ebug*/
+*/bin/
+*/obj/
+**/[Bb]in/
+**/[Oo]bj/
+
+# --- .NET / NuGet ---
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+*.snupkg
+*.nupkg
+.nuget/
+packages/
+**/packages/*
+!**/packages/build/
+*.deps.json
+*.runtimeconfig.json
+
+# --- Logs / Temp ---
+*.log
+*.tlog
+*.svclog
+*.pid
+*.tmp
+*.temp
+[Tt]emp/
+~$*
+
+# --- Test / Coverage ---
+TestResults/
+*.coverage
+*.coveragexml
+.coverage
+.coveragexml
+.vscode-test/
+
+# --- Publish / Artifacts ---
+publish/
+artifacts/
+*.pubxml
+*.pubxml.user
+
+# --- Resharper / Sonar / Analyzer ---
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+.sonar/
+.analyzers/
+
+# --- ASP.NET / Static assets ---
+wwwroot/**/*.map
+wwwroot/lib/
+**/staticwebassets.development.json
+**/staticwebassets.runtime.json
+**/staticwebassets.pack.sentinel
+
+# --- Rider caches ---
+.idea/.idea.*
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/contentModel.xml
+
+# --- MSBuild / Cache ---
+*.obj
+*.pch
+*.ilk
+*.pdb
+*.idb
+*.ipch
+*.iobj
+*.rsuser
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+
+# --- Others ---
+*.dbmdl
+*.jfm
+*.psess
+*.psess.run
+*.vsp
+*.vspx
+*.sap
+*.orig
+*.bak
+*.orig.*
+*.bak.*
+
+
